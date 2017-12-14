@@ -34,13 +34,10 @@ router.get('/:videoName', function (req, res) {
   let path = generateFileFullLocation(videoName);
   let totalSize = fetchFileSize(path);
 
-  if (req.headers['range']) {
-    let range = req.headers.range;
-    let { start, end, chunkSize } = generateIndexesWithGivenLength(range, totalSize);
-    let file = fs.createReadStream(path, {
-      start: start,
-      end: end
-    });
+  let range = req.headers['range'];
+  if (range) {
+    let {start, end, chunkSize} = generateIndexesWithGivenLength(range, totalSize);
+    let file = fs.createReadStream(path, {start, end});
     res.writeHead(206, {
       'Content-Range': 'bytes ' + start + '-' + end + '/' + totalSize,
       'Accept-Ranges': 'bytes',
