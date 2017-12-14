@@ -10,11 +10,15 @@ function generateFileFullLocation (videoFileNameAndFormat) {
   return configs.VIDEOS_DIRECTORY + videoFileNameAndFormat;
 }
 
-function generateContentWithGivenLength (headerRange) {
+function generateIndexesWithGivenLength (headerRange, totalSize) {
   let parts = headerRange.replace(/bytes=/, "").split("-");
+  let start = parseInt(parts[0], 10);
+  let end = parts[1] ? parseInt(parts[1], 10) : totalSize - 1;
+  console.log('RANGE: ' + start + ' - ' + end + ' = ' + chunkSize);
   return {
-    partialstart: parts[0],
-    partialend: parts[1],
+    start: start,
+    end: end,
+    chunkSize: (end - start) + 1
   };
 }
 
@@ -28,13 +32,7 @@ router.get('/:videoName', function (req, res) {
 
   if (req.headers['range']) {
     let range = req.headers.range;
-    console.log('range is: ' + range);
-    let { partialstart, partialend } = generateContentWithGivenLength(range);
-    let start = parseInt(partialstart, 10);
-    let end = partialend ? parseInt(partialend, 10) : total - 1;
-    let chunksize = (end - start) + 1;
-    console.log('RANGE: ' + start + ' - ' + end + ' = ' + chunksize);
-
+    let { start, end, chunkSize} = generateIndexesWithGivenLength(range, total);
     let file = fs.createReadStream(path, {
       start: start,
       end: end
@@ -42,7 +40,7 @@ router.get('/:videoName', function (req, res) {
     res.writeHead(206, {
       'Content-Range': 'bytes ' + start + '-' + end + '/' + total,
       'Accept-Ranges': 'bytes',
-      'Content-Length': chunksize,
+      'Content-Length': chunkSize,
       'Content-Type': 'video/mp4'
     });
     file.pipe(res);
