@@ -7,6 +7,10 @@ A Node js Video Streamer Which Uses Express Web Server And Raw HTTP Methods And 
 
 Enjoy The Streamed Video :D
 
+### Installation and Setup:
+`npm install`
+`node app.js`
+
 
 ### Notes
 - `Attention:` You Must Specify Video File Type In videoName!
