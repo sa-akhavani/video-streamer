@@ -7,19 +7,7 @@ The `client` is just a simple html page that casts the video for tests.
 
 ## Server:
 
-### Usage:
-### Code explanation:
-The `server` directory contains two files. `app.js` and `videoStreamer.js`.
-
-`app.js` launches a simple http server.
-
-`videoStreamer.js` is the core file that contains the API and the code that streams the video.
-
-### Adding a video file:
-Add the file to the `./server/video/` directory, or change the `./server/config.json` file to use another directory for your video source.
-
 ### Running the server:
-Default port is 8583. You can change it by editing the `./server/config.json` file.
 
 ```bash
 # Installing dependencies
@@ -28,6 +16,18 @@ npm install
 # Running the server
 node ./server/app.js
 ```
+
+### Changing Default Config:
+- Config file is located in `./server/config`
+- Adding a video file to the server:
+    - Add the file to the `./server/video/` directory, or change the config file to use another directory for your video source.
+- Change server listening port:
+    - Default port is `8583`. You can change it by editing the config file.
+
+### Code explanation:
+The `server` directory contains two files.
+`app.js` launches a simple http server.
+`videoStreamer.js` is the core file that contains the API and the code that streams the video.
 
 ## Testing the setup:
 Send a `Get` Request to:
